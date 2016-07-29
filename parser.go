@@ -33,5 +33,8 @@ func parser(filename string) (wolfMap, error) {
 	if len(carteFormat) != heightInt*widthInt {
 		return out, fmt.Errorf("Map format doesn't fit")
 	}
+	out.size.x = uint32(widthInt)
+	out.size.y = uint32(heightInt)
+	out.array = []byte(carte.Value())
 	return out, nil
 }

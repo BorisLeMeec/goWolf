@@ -9,6 +9,8 @@ import (
 )
 
 var myData data
+var height = 400
+var width = 400
 
 func checkKey() {
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
@@ -26,25 +28,28 @@ func checkKey() {
 }
 
 func update(screen *ebiten.Image) error {
-	pixels, _ := getPixelArray(screen)
-
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		return fmt.Errorf("Window Closed")
 	}
-	screen.Fill(color.Black)
+	fill(myData.pixelArray, color.Black)
 	checkKey()
-	setPixel(screen, pixels, myData.player.pos, color.White)
-	screen.ReplacePixels(pixels)
+	setPixel(screen, myData.pixelArray, myData.player.pos, color.White)
+	screen.ReplacePixels(myData.pixelArray)
 	return (nil)
 }
 
 func main() {
+	var err error
+
 	if len(os.Args) < 2 {
 		fmt.Printf("usage :\n%s <path_to_map.ini>\n", os.Args[0])
 		return
 	}
-	_, err := parser(os.Args[1])
-	fmt.Printf("Error : %s\n", err)
+	myData.theMap, err = parser(os.Args[1])
+	myData.pixelArray = newPixelArray(width, height)
+	if err != nil {
+		fmt.Printf("Error : %s\n", err)
+	}
 	ret := ebiten.Run(update, 400, 400, 1, "Go is Wonderful")
 	fmt.Printf("Error : %s\n", ret)
 }

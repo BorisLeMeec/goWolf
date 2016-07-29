@@ -23,6 +23,8 @@ type personnage struct {
 }
 
 type data struct {
-	player  personnage
-	refresh bool
+	pixelArray []uint8
+	theMap     wolfMap
+	player     personnage
+	refresh    bool
 }

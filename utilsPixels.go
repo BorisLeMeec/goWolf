@@ -30,3 +30,25 @@ func getPixelArray(img *ebiten.Image) ([]uint8, error) {
 	}
 	return out, nil
 }
+
+func newPixelArray(width, height int) []uint8 {
+	var out []uint8
+
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			r, g, b, a := color.Black.RGBA()
+			out = append(out, uint8(r), uint8(g), uint8(b), uint8(a))
+		}
+	}
+	return out
+}
+
+func fill(pixelArray []uint8, color color.Color) {
+	for x := 0; x < len(pixelArray); x += 4 {
+		r, g, b, a := color.RGBA()
+		pixelArray[x] = uint8(r)
+		pixelArray[x+1] = uint8(g)
+		pixelArray[x+2] = uint8(b)
+		pixelArray[x+3] = uint8(a)
+	}
+}
