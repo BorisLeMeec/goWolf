@@ -39,6 +39,10 @@ func update(screen *ebiten.Image) error {
 }
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Printf("usage :\n%s <path_to_map.ini>\n", os.Args[0])
+		return
+	}
 	_, err := parser(os.Args[1])
 	fmt.Printf("Error : %s\n", err)
 	ret := ebiten.Run(update, 400, 400, 1, "Go is Wonderful")
