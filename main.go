@@ -33,6 +33,7 @@ func update(screen *ebiten.Image) error {
 	}
 	fill(myData.pixelArray, color.Black)
 	checkKey()
+	drawWall(screen, myData.pixelArray, 100, 200)
 	setPixel(screen, myData.pixelArray, myData.player.pos, color.White)
 	screen.ReplacePixels(myData.pixelArray)
 	return (nil)
