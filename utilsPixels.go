@@ -9,7 +9,7 @@ import (
 func setPixel(img *ebiten.Image, pixels []uint8, pos position, color color.Color) {
 	imageHeight, imageWidth := img.Size()
 
-	if pos.x < 0 || pos.y < 0 || pos.x > uint32(imageWidth) || pos.y > uint32(imageHeight) {
+	if pos.x < 0 || pos.y < 0 || pos.x > uint32(imageWidth-1) || pos.y > uint32(imageHeight-1) {
 		return
 	}
 	index := 4 * (pos.y*uint32(imageWidth) + pos.x)

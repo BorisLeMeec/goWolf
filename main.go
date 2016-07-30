@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"image/color"
+	"math"
 	"os"
 
 	"github.com/hajimehoshi/ebiten"
@@ -11,19 +12,28 @@ import (
 var myData data
 var height = 400
 var width = 400
+var angleBetweenRay = 60 / float64(width)
 
 func checkKey() {
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		myData.player.pos.y--
+		myData.player.pos.y += math.Sin(myData.player.angle * (math.Pi / 180))
+		myData.player.pos.x += math.Cos(myData.player.angle * (math.Pi / 180))
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		myData.player.pos.y++
+		myData.player.pos.y -= math.Sin(myData.player.angle * (math.Pi / 180))
+		myData.player.pos.x -= math.Cos(myData.player.angle * (math.Pi / 180))
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		myData.player.pos.x--
+		myData.player.angle -= 5
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		myData.player.pos.x++
+		myData.player.angle += 5
+	}
+	if myData.player.angle > 360 {
+		myData.player.angle = 0
+	}
+	if myData.player.angle < 0 {
+		myData.player.angle = 360
 	}
 }
 
@@ -33,8 +43,7 @@ func update(screen *ebiten.Image) error {
 	}
 	fill(myData.pixelArray, color.Black)
 	checkKey()
-	drawWall(screen, myData.pixelArray, 100, 200)
-	setPixel(screen, myData.pixelArray, myData.player.pos, color.White)
+	drawScreen(screen, myData)
 	screen.ReplacePixels(myData.pixelArray)
 	return (nil)
 }
