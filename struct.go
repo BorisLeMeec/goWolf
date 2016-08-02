@@ -8,6 +8,11 @@ func floatPosToIntPos(in floatPosition) position {
 	return out
 }
 
+type pixelArray struct {
+	size   size
+	pixels []uint8
+}
+
 type position struct {
 	x uint32
 	y uint32
@@ -30,8 +35,8 @@ type ray struct {
 }
 
 type wolfMap struct {
-	size  size
-	array []uint8
+	size size
+	pix  pixelArray
 }
 
 type personnage struct {
@@ -40,8 +45,8 @@ type personnage struct {
 }
 
 type data struct {
-	pixelArray []uint8
-	theMap     wolfMap
-	player     personnage
-	refresh    bool
+	pix     pixelArray
+	theMap  wolfMap
+	player  personnage
+	refresh bool
 }

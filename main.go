@@ -10,8 +10,8 @@ import (
 )
 
 var myData data
-var height = 400
-var width = 400
+var height = uint32(400)
+var width = uint32(400)
 var angleBetweenRay = 60 / float64(width)
 
 func checkKey() {
@@ -24,10 +24,10 @@ func checkKey() {
 		myData.player.pos.x -= math.Cos(myData.player.angle * (math.Pi / 180))
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		myData.player.angle -= 5
+		myData.player.angle -= 3
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		myData.player.angle += 5
+		myData.player.angle += 3
 	}
 	if myData.player.angle > 360 {
 		myData.player.angle = 0
@@ -41,10 +41,10 @@ func update(screen *ebiten.Image) error {
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		return fmt.Errorf("Window Closed")
 	}
-	fill(myData.pixelArray, color.Black)
+	fill(myData.pix, color.Black)
 	checkKey()
 	drawScreen(screen, myData)
-	screen.ReplacePixels(myData.pixelArray)
+	screen.ReplacePixels(myData.pix.pixels)
 	return (nil)
 }
 
@@ -56,7 +56,7 @@ func main() {
 		return
 	}
 	myData.theMap, err = parser(os.Args[1])
-	myData.pixelArray = newPixelArray(width, height)
+	myData.pix = newPixelArray(width, height)
 	if err != nil {
 		fmt.Printf("Error : %s\n", err)
 	}
