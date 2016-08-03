@@ -47,17 +47,41 @@ func newPixelArray(width, height uint32) pixelArray {
 }
 
 func blit(dest, src pixelArray, posStart position, size size) {
-	var pos position
+	var posToBlit, posToGet position
+	var indexBlit, indexGet uint32
+	var rSrc, gSrc, bSrc, aSrc, rBlit, gBlit, bBlit, aBlit uint8
 
 	if posStart.x < 0 || posStart.x > dest.size.x || posStart.y < 0 || posStart.y > dest.size.y {
 		return
 	}
-	if size.x < 0 || size.x > src.size.x || size.y < 0 || size.y > src.size.y {
+	if size.x < 0 || size.y < 0 {
 		return
 	}
-	for pos.y = posStart.y; pos.y < size.y && pos.y < dest.size.y && pos.y < src.size.y; pos.y++ {
-		for pos.x = posStart.x; pos.x < size.x && pos.x < dest.size.x && pos.x < src.size.x; pos.x++ {
-
+	for posToGet.y = 0; posToGet.y < src.size.y && posToGet.y < size.y; posToGet.y++ {
+		for posToGet.x = 0; posToGet.x < src.size.x && posToGet.x < size.x; posToGet.x++ {
+			indexGet = 4 * (posToGet.y*src.size.x + posToGet.x)
+			posToBlit.y = posToGet.y + posStart.y
+			posToBlit.x = posToGet.x + posStart.x
+			if posToBlit.x > dest.size.x-1 || posToBlit.y > dest.size.y-1 {
+				continue
+			}
+			indexBlit = 4 * (posToBlit.y*dest.size.x + posToBlit.x)
+			rSrc = src.pixels[indexGet+0]
+			gSrc = src.pixels[indexGet+1]
+			bSrc = src.pixels[indexGet+2]
+			aSrc = src.pixels[indexGet+3]
+			// rDest = src.pixels[indexBlit+0]
+			// gDest = src.pixels[indexBlit+1]
+			// bDest = src.pixels[indexBlit+2]
+			// aDest = src.pixels[indexBlit+3]
+			rBlit = rSrc
+			gBlit = gSrc
+			bBlit = bSrc
+			aBlit = aSrc
+			dest.pixels[indexBlit+0] = rBlit
+			dest.pixels[indexBlit+1] = gBlit
+			dest.pixels[indexBlit+2] = bBlit
+			dest.pixels[indexBlit+3] = aBlit
 		}
 	}
 }
