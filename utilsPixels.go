@@ -60,10 +60,7 @@ func blit(dest, src pixelArray, posStart position, size size) {
 	for posToGet.y = 0; posToGet.y < src.size.y && posToGet.y < size.y; posToGet.y++ {
 		for posToGet.x = 0; posToGet.x < src.size.x && posToGet.x < size.x; posToGet.x++ {
 			indexGet = 4 * (posToGet.y*src.size.x + posToGet.x)
-			rSrc = src.pixels[indexGet+0]
-			gSrc = src.pixels[indexGet+1]
-			bSrc = src.pixels[indexGet+2]
-			aSrc = src.pixels[indexGet+3]
+			rSrc, gSrc, bSrc, aSrc = getColorAt(src, indexGet)
 			for i := uint32(0); i < src.scale.x; i++ {
 				for j := uint32(0); j < src.scale.y; j++ {
 					posToBlit.x = src.scale.x*(posToGet.x+posStart.x) + j
@@ -72,10 +69,7 @@ func blit(dest, src pixelArray, posStart position, size size) {
 						continue
 					}
 					indexBlit = 4 * (posToBlit.y*dest.size.x + posToBlit.x)
-					rDest = dest.pixels[indexBlit+0]
-					gDest = dest.pixels[indexBlit+1]
-					bDest = dest.pixels[indexBlit+2]
-					aDest = dest.pixels[indexBlit+3]
+					rDest, gDest, bDest, aDest = getColorAt(dest, indexBlit)
 					rBlit = rSrc*(aSrc/255) + rDest*(1.0-(aSrc/255))
 					gBlit = gSrc*(aSrc/255) + gDest*(1.0-(aSrc/255))
 					bBlit = bSrc*(aSrc/255) + bDest*(1.0-(aSrc/255))
