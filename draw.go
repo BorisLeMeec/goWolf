@@ -22,13 +22,13 @@ func drawWall(img *ebiten.Image, pix pixelArray, height, x int) error {
 	for pos.y = 0; pos.y < uint32(imageHeight); pos.y++ {
 		if pos.y < uint32(((imageHeight - height) / 2)) {
 			myColor = color.Black
-			setPixel(img, pix, pos, myColor)
+			setPixel(pix, pos, myColor)
 		} else if pos.y < uint32(height+((imageHeight-height)/2)) {
 			myColor = color.White
-			setPixel(img, pix, pos, myColor)
+			setPixel(pix, pos, myColor)
 		} else {
 			myColor = color.Black
-			setPixel(img, pix, pos, myColor)
+			setPixel(pix, pos, myColor)
 		}
 	}
 	return nil
@@ -51,7 +51,7 @@ func drawScreen(img *ebiten.Image, myData data) {
 		myRay.angle += angleBetweenRay
 	}
 	for _, value := range fakeScreen {
-		setPixel(img, myData.pix, floatPosToIntPos(value), color.White)
+		setPixel(myData.pix, floatPosToIntPos(value), color.White)
 	}
-	setPixel(img, myData.pix, floatPosToIntPos(myData.player.pos), color.White)
+	setPixel(myData.pix, floatPosToIntPos(myData.player.pos), color.White)
 }

@@ -6,18 +6,16 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-func setPixel(img *ebiten.Image, pixels pixelArray, pos position, color color.Color) {
-	imageHeight, imageWidth := img.Size()
-
-	if pos.x < 0 || pos.y < 0 || pos.x > uint32(imageWidth-1) || pos.y > uint32(imageHeight-1) {
+func setPixel(pix pixelArray, pos position, color color.Color) {
+	if pos.x < 0 || pos.y < 0 || pos.x > pix.size.x-1 || pos.y > pix.size.y-1 {
 		return
 	}
-	index := 4 * (pos.y*uint32(imageWidth) + pos.x)
+	index := 4 * (pos.y*pix.size.x + pos.x)
 	r, g, b, a := color.RGBA()
-	pixels.pixels[index+0] = uint8(r)
-	pixels.pixels[index+1] = uint8(g)
-	pixels.pixels[index+2] = uint8(b)
-	pixels.pixels[index+3] = uint8(a)
+	pix.pixels[index+0] = uint8(r)
+	pix.pixels[index+1] = uint8(g)
+	pix.pixels[index+2] = uint8(b)
+	pix.pixels[index+3] = uint8(a)
 }
 
 func getPixelArray(img *ebiten.Image) (pixelArray, error) {
@@ -25,8 +23,8 @@ func getPixelArray(img *ebiten.Image) (pixelArray, error) {
 
 	imageHeight, imageWidth := img.Size()
 
-	for y := 0; y < imageHeight; y++ {
-		for x := 0; x < imageWidth; x++ {
+	for y := 0; y < imageHeight; y += 4 {
+		for x := 0; x < imageWidth; x += 4 {
 			r, g, b, a := img.At(y, x).RGBA()
 			out.pixels = append(out.pixels, uint8(r), uint8(g), uint8(b), uint8(a))
 		}
@@ -39,8 +37,8 @@ func newPixelArray(width, height uint32) pixelArray {
 
 	out.size.x = width
 	out.size.y = height
-	for y := uint32(0); y < height; y++ {
-		for x := uint32(0); x < width; x++ {
+	for y := uint32(0); y < height*4; y += 4 {
+		for x := uint32(0); x < width*4; x += 4 {
 			r, g, b, a := color.Black.RGBA()
 			out.pixels = append(out.pixels, uint8(r), uint8(g), uint8(b), uint8(a))
 		}
@@ -48,12 +46,32 @@ func newPixelArray(width, height uint32) pixelArray {
 	return out
 }
 
-func fill(pixels pixelArray, color color.Color) {
-	for x := 0; x < len(pixels.pixels); x += 4 {
-		r, g, b, a := color.RGBA()
-		pixels.pixels[x] = uint8(r)
-		pixels.pixels[x+1] = uint8(g)
-		pixels.pixels[x+2] = uint8(b)
-		pixels.pixels[x+3] = uint8(a)
+func blit(dest, src pixelArray, posStart position, size size) {
+	var pos position
+
+	if posStart.x < 0 || posStart.x > dest.size.x || posStart.y < 0 || posStart.y > dest.size.y {
+		return
+	}
+	if size.x < 0 || size.x > src.size.x || size.y < 0 || size.y > src.size.y {
+		return
+	}
+	for pos.y = posStart.y; pos.y < size.y && pos.y < dest.size.y && pos.y < src.size.y; pos.y++ {
+		for pos.x = posStart.x; pos.x < size.x && pos.x < dest.size.x && pos.x < src.size.x; pos.x++ {
+
+		}
+	}
+}
+
+func fill(pix pixelArray, color color.Color) {
+	_r, _g, _b, _a := color.RGBA()
+	r := uint8(_r)
+	g := uint8(_g)
+	b := uint8(_b)
+	a := uint8(_a)
+	for x := uint32(0); x < pix.size.x*pix.size.y*4; x += 4 {
+		pix.pixels[x+0] = r
+		pix.pixels[x+1] = g
+		pix.pixels[x+2] = b
+		pix.pixels[x+3] = a
 	}
 }
