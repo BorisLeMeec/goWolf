@@ -6,7 +6,7 @@ func createMiniMap() miniMap {
 	var out miniMap
 
 	out.pix = newPixelArray(10, 10)
-	out.pix.scale = 5
+	out.pix.scale = newSize(5, 5)
 	out.zoom = 1
 	out.posStart = newPosition(0, 0)
 	return out

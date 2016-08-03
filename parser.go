@@ -35,6 +35,6 @@ func parser(filename string) (wolfMap, error) {
 	}
 	out.size.x = uint32(widthInt)
 	out.size.y = uint32(heightInt)
-	out.array = []byte(carte.Value())
+	out.array = []byte(carteFormat)
 	return out, nil
 }

@@ -8,6 +8,11 @@ func newPosition(x, y int) position {
 	return out
 }
 
+func newSize(x, y int) size {
+
+	return size(newPosition(x, y))
+}
+
 func floatPosToIntPos(in floatPosition) position {
 	var out position
 
@@ -19,7 +24,7 @@ func floatPosToIntPos(in floatPosition) position {
 type pixelArray struct {
 	size   size
 	pixels []uint8
-	scale  float32
+	scale  size
 }
 
 type position struct {

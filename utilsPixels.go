@@ -49,7 +49,7 @@ func newPixelArray(width, height uint32) pixelArray {
 func blit(dest, src pixelArray, posStart position, size size) {
 	var posToBlit, posToGet position
 	var indexBlit, indexGet uint32
-	var rSrc, gSrc, bSrc, aSrc, rBlit, gBlit, bBlit, aBlit uint8
+	var rSrc, gSrc, bSrc, aSrc, rBlit, gBlit, bBlit, aBlit, rDest, gDest, bDest, aDest uint8
 
 	if posStart.x < 0 || posStart.x > dest.size.x || posStart.y < 0 || posStart.y > dest.size.y {
 		return
@@ -60,28 +60,32 @@ func blit(dest, src pixelArray, posStart position, size size) {
 	for posToGet.y = 0; posToGet.y < src.size.y && posToGet.y < size.y; posToGet.y++ {
 		for posToGet.x = 0; posToGet.x < src.size.x && posToGet.x < size.x; posToGet.x++ {
 			indexGet = 4 * (posToGet.y*src.size.x + posToGet.x)
-			posToBlit.y = posToGet.y + posStart.y
-			posToBlit.x = posToGet.x + posStart.x
-			if posToBlit.x > dest.size.x-1 || posToBlit.y > dest.size.y-1 {
-				continue
-			}
-			indexBlit = 4 * (posToBlit.y*dest.size.x + posToBlit.x)
 			rSrc = src.pixels[indexGet+0]
 			gSrc = src.pixels[indexGet+1]
 			bSrc = src.pixels[indexGet+2]
 			aSrc = src.pixels[indexGet+3]
-			// rDest = src.pixels[indexBlit+0]
-			// gDest = src.pixels[indexBlit+1]
-			// bDest = src.pixels[indexBlit+2]
-			// aDest = src.pixels[indexBlit+3]
-			rBlit = rSrc
-			gBlit = gSrc
-			bBlit = bSrc
-			aBlit = aSrc
-			dest.pixels[indexBlit+0] = rBlit
-			dest.pixels[indexBlit+1] = gBlit
-			dest.pixels[indexBlit+2] = bBlit
-			dest.pixels[indexBlit+3] = aBlit
+			for i := uint32(0); i < src.scale.x; i++ {
+				for j := uint32(0); j < src.scale.y; j++ {
+					posToBlit.x = src.scale.x*(posToGet.x+posStart.x) + j
+					posToBlit.y = src.scale.y*(posToGet.y+posStart.y) + i
+					if posToBlit.x > dest.size.x-1 || posToBlit.y > dest.size.y-1 {
+						continue
+					}
+					indexBlit = 4 * (posToBlit.y*dest.size.x + posToBlit.x)
+					rDest = dest.pixels[indexBlit+0]
+					gDest = dest.pixels[indexBlit+1]
+					bDest = dest.pixels[indexBlit+2]
+					aDest = dest.pixels[indexBlit+3]
+					rBlit = rSrc*(aSrc/255) + rDest*(1.0-(aSrc/255))
+					gBlit = gSrc*(aSrc/255) + gDest*(1.0-(aSrc/255))
+					bBlit = bSrc*(aSrc/255) + bDest*(1.0-(aSrc/255))
+					aBlit = aDest
+					dest.pixels[indexBlit+0] = rBlit
+					dest.pixels[indexBlit+1] = gBlit
+					dest.pixels[indexBlit+2] = bBlit
+					dest.pixels[indexBlit+3] = aBlit
+				}
+			}
 		}
 	}
 }
