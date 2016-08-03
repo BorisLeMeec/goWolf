@@ -20,6 +20,7 @@ func update(screen *ebiten.Image) error {
 	fill(myData.pix, color.Black)
 	checkKey()
 	drawScreen(screen, myData)
+	// drawMiniMap()
 	screen.ReplacePixels(myData.pix.pixels)
 	return (nil)
 }
@@ -33,6 +34,7 @@ func main() {
 	}
 	myData.theMap, err = parser(os.Args[1])
 	myData.pix = newPixelArray(width, height)
+	myData.miniMap = createMiniMap()
 	if err != nil {
 		fmt.Printf("Error : %s\n", err)
 	}

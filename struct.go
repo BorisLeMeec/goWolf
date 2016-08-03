@@ -1,5 +1,13 @@
 package main
 
+func newPosition(x, y int) position {
+	var out position
+
+	out.x = uint32(x)
+	out.y = uint32(y)
+	return out
+}
+
 func floatPosToIntPos(in floatPosition) position {
 	var out position
 
@@ -11,6 +19,7 @@ func floatPosToIntPos(in floatPosition) position {
 type pixelArray struct {
 	size   size
 	pixels []uint8
+	scale  float32
 }
 
 type position struct {
@@ -35,8 +44,8 @@ type ray struct {
 }
 
 type wolfMap struct {
-	size size
-	pix  pixelArray
+	size  size
+	array []byte
 }
 
 type personnage struct {
@@ -44,8 +53,15 @@ type personnage struct {
 	pos   floatPosition
 }
 
+type miniMap struct {
+	posStart position
+	pix      pixelArray
+	zoom     float32
+}
+
 type data struct {
 	pix     pixelArray
+	miniMap miniMap
 	theMap  wolfMap
 	player  personnage
 	refresh bool

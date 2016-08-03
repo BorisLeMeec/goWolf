@@ -2,7 +2,6 @@ package main
 
 import (
 	"image/color"
-	"math"
 
 	"github.com/hajimehoshi/ebiten"
 )
@@ -35,23 +34,7 @@ func drawWall(img *ebiten.Image, pix pixelArray, height, x int) error {
 }
 
 func drawScreen(img *ebiten.Image, myData data) {
-	var myRay ray
-	var fakeScreen []floatPosition
-	var prePrePos, prePos, pos floatPosition
-	widthImage, _ := img.Size()
-
-	for x := 0; x < widthImage; x++ {
-		prePrePos.x = 1
-		prePrePos.y = float64(-(widthImage/2)+x) / float64(widthImage)
-		prePos.x = prePrePos.x*math.Cos(myData.player.angle) - prePrePos.y*math.Sin(myData.player.angle)
-		prePos.y = prePrePos.x*math.Sin(myData.player.angle) + prePrePos.y*math.Cos(myData.player.angle)
-		pos.x = prePos.x + myData.player.pos.x*30
-		pos.x = prePos.y + myData.player.pos.y*30
-		fakeScreen = append(fakeScreen, pos)
-		myRay.angle += angleBetweenRay
-	}
-	for _, value := range fakeScreen {
-		setPixel(myData.pix, floatPosToIntPos(value), color.White)
-	}
+	drawMiniMap(myData)
 	setPixel(myData.pix, floatPosToIntPos(myData.player.pos), color.White)
+	blit(myData.pix, myData.miniMap.pix, myData.miniMap.posStart, myData.miniMap.pix.size)
 }
