@@ -20,7 +20,6 @@ func update(screen *ebiten.Image) error {
 	fill(myData.pix, color.Black)
 	checkKey()
 	drawScreen(screen, myData)
-	// drawMiniMap()
 	screen.ReplacePixels(myData.pix.pixels)
 	return (nil)
 }

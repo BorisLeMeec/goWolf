@@ -24,9 +24,10 @@ func drawMiniMap(myData data) {
 			case '1':
 				myColor = color.White
 			default:
-				myColor = color.Black
+				myColor = color.RGBA{0, 0, 0, 255}
 			}
 			setPixel(myData.miniMap.pix, posInMap, myColor)
 		}
 	}
+	changeOpacity(myData.miniMap.pix, 0.2)
 }

@@ -12,16 +12,12 @@ func setPixel(pix pixelArray, pos position, color color.Color) {
 	}
 	index := 4 * (pos.y*pix.size.x + pos.x)
 	r, g, b, a := color.RGBA()
-	pix.pixels[index+0] = uint8(r)
-	pix.pixels[index+1] = uint8(g)
-	pix.pixels[index+2] = uint8(b)
-	pix.pixels[index+3] = uint8(a)
+	setColorAt(pix, index, uint8(r), uint8(g), uint8(b), uint8(a))
 }
 
 func getPixelArray(img *ebiten.Image) (pixelArray, error) {
-	var out pixelArray
-
 	imageHeight, imageWidth := img.Size()
+	var out pixelArray
 
 	for y := 0; y < imageHeight; y += 4 {
 		for x := 0; x < imageWidth; x += 4 {
@@ -47,9 +43,9 @@ func newPixelArray(width, height uint32) pixelArray {
 }
 
 func blit(dest, src pixelArray, posStart position, size size) {
+	var rSrc, gSrc, bSrc, aSrc, rBlit, gBlit, bBlit, aBlit, rDest, gDest, bDest, aDest uint8
 	var posToBlit, posToGet position
 	var indexBlit, indexGet uint32
-	var rSrc, gSrc, bSrc, aSrc, rBlit, gBlit, bBlit, aBlit, rDest, gDest, bDest, aDest uint8
 
 	if posStart.x < 0 || posStart.x > dest.size.x || posStart.y < 0 || posStart.y > dest.size.y {
 		return
@@ -70,14 +66,11 @@ func blit(dest, src pixelArray, posStart position, size size) {
 					}
 					indexBlit = 4 * (posToBlit.y*dest.size.x + posToBlit.x)
 					rDest, gDest, bDest, aDest = getColorAt(dest, indexBlit)
-					rBlit = rSrc*(aSrc/255) + rDest*(1.0-(aSrc/255))
-					gBlit = gSrc*(aSrc/255) + gDest*(1.0-(aSrc/255))
-					bBlit = bSrc*(aSrc/255) + bDest*(1.0-(aSrc/255))
+					rBlit = uint8(float32(rSrc)*(float32(aSrc)/255.0) + float32(rDest)*(1.0-(float32(aSrc)/255.0)))
+					gBlit = uint8(float32(gSrc)*(float32(aSrc)/255.0) + float32(gDest)*(1.0-(float32(aSrc)/255.0)))
+					bBlit = uint8(float32(bSrc)*(float32(aSrc)/255.0) + float32(bDest)*(1.0-(float32(aSrc)/255.0)))
 					aBlit = aDest
-					dest.pixels[indexBlit+0] = rBlit
-					dest.pixels[indexBlit+1] = gBlit
-					dest.pixels[indexBlit+2] = bBlit
-					dest.pixels[indexBlit+3] = aBlit
+					setColorAt(dest, indexBlit, rBlit, gBlit, bBlit, aBlit)
 				}
 			}
 		}
@@ -86,14 +79,8 @@ func blit(dest, src pixelArray, posStart position, size size) {
 
 func fill(pix pixelArray, color color.Color) {
 	_r, _g, _b, _a := color.RGBA()
-	r := uint8(_r)
-	g := uint8(_g)
-	b := uint8(_b)
-	a := uint8(_a)
+
 	for x := uint32(0); x < pix.size.x*pix.size.y*4; x += 4 {
-		pix.pixels[x+0] = r
-		pix.pixels[x+1] = g
-		pix.pixels[x+2] = b
-		pix.pixels[x+3] = a
+		setColorAt(pix, x, uint8(_r), uint8(_g), uint8(_b), uint8(_a))
 	}
 }
