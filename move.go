@@ -6,14 +6,19 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-func checkKey() {
+func checkKey(myData *data) {
+	var newPos floatPosition
+
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		myData.player.pos.y += math.Sin(myData.player.angle * (math.Pi / 180))
-		myData.player.pos.x += math.Cos(myData.player.angle * (math.Pi / 180))
+		newPos.y = myData.player.pos.y + math.Sin(myData.player.angle*(math.Pi/180))/30
+		newPos.x = myData.player.pos.x + math.Cos(myData.player.angle*(math.Pi/180))/30
+		if checkPos(*myData, newPos) {
+			myData.player.pos = newPos
+		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		myData.player.pos.y -= math.Sin(myData.player.angle * (math.Pi / 180))
-		myData.player.pos.x -= math.Cos(myData.player.angle * (math.Pi / 180))
+		myData.player.pos.y -= math.Sin(myData.player.angle*(math.Pi/180)) / 30
+		myData.player.pos.x -= math.Cos(myData.player.angle*(math.Pi/180)) / 30
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
 		myData.player.angle -= 3
@@ -27,4 +32,11 @@ func checkKey() {
 	if myData.player.angle < 0 {
 		myData.player.angle = 360
 	}
+}
+
+func checkPos(myData data, pos floatPosition) bool {
+	if isThereWall(floatPosToIntPos(pos), myData) {
+		return false
+	}
+	return true
 }

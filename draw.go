@@ -35,6 +35,5 @@ func drawWall(img *ebiten.Image, pix pixelArray, height, x int) error {
 
 func drawScreen(img *ebiten.Image, myData data) {
 	drawMiniMap(myData)
-	setPixel(myData.pix, floatPosToIntPos(myData.player.pos), color.White)
 	blit(myData.pix, myData.miniMap.pix, myData.miniMap.posStart, myData.miniMap.pix.size)
 }
