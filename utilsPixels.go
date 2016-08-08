@@ -12,7 +12,7 @@ func setPixel(pix pixelArray, pos position, color color.Color) {
 	}
 	index := 4 * (pos.y*pix.size.x + pos.x)
 	r, g, b, a := color.RGBA()
-	setColorAt(pix, index, uint8(r), uint8(g), uint8(b), uint8(a))
+	setColorAt(pix, index, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 }
 
 func getPixelArray(img *ebiten.Image) (pixelArray, error) {
@@ -22,7 +22,7 @@ func getPixelArray(img *ebiten.Image) (pixelArray, error) {
 	for y := 0; y < imageHeight; y += 4 {
 		for x := 0; x < imageWidth; x += 4 {
 			r, g, b, a := img.At(y, x).RGBA()
-			out.pixels = append(out.pixels, uint8(r), uint8(g), uint8(b), uint8(a))
+			out.pixels = append(out.pixels, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 		}
 	}
 	return out, nil
@@ -36,7 +36,7 @@ func newPixelArray(width, height uint32) pixelArray {
 	for y := uint32(0); y < height*4; y += 4 {
 		for x := uint32(0); x < width*4; x += 4 {
 			r, g, b, a := color.Black.RGBA()
-			out.pixels = append(out.pixels, uint8(r), uint8(g), uint8(b), uint8(a))
+			out.pixels = append(out.pixels, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 		}
 	}
 	return out
@@ -81,6 +81,6 @@ func fill(pix pixelArray, color color.Color) {
 	_r, _g, _b, _a := color.RGBA()
 
 	for x := uint32(0); x < pix.size.x*pix.size.y*4; x += 4 {
-		setColorAt(pix, x, uint8(_r), uint8(_g), uint8(_b), uint8(_a))
+		setColorAt(pix, x, uint8(_r>>8), uint8(_g>>8), uint8(_b>>8), uint8(_a>>8))
 	}
 }
