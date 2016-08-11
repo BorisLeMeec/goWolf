@@ -28,8 +28,7 @@ func getPixelArray(img *ebiten.Image) (pixelArray, error) {
 	return out, nil
 }
 
-func newPixelArray(width, height uint32) pixelArray {
-	var out pixelArray
+func newPixelArray(width, height uint32) (out pixelArray) {
 
 	out.size.x = width
 	out.size.y = height
@@ -39,7 +38,7 @@ func newPixelArray(width, height uint32) pixelArray {
 			out.pixels = append(out.pixels, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 		}
 	}
-	return out
+	return
 }
 
 func blit(dest, src pixelArray, posStart position, size size) {

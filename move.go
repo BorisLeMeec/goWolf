@@ -6,30 +6,30 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-func checkKey(myData *data) {
+func checkKey() {
 	var newPos floatPosition
 
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
 		newPos = myData.player.pos
 		newPos.y = myData.player.pos.y + math.Sin(myData.player.angle*(math.Pi/180))/30
-		if checkPos(*myData, newPos) {
+		if checkPos(newPos) {
 			myData.player.pos = newPos
 		}
 		newPos = myData.player.pos
 		newPos.x = myData.player.pos.x + math.Cos(myData.player.angle*(math.Pi/180))/30
-		if checkPos(*myData, newPos) {
+		if checkPos(newPos) {
 			myData.player.pos = newPos
 		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
 		newPos = myData.player.pos
 		newPos.y = myData.player.pos.y - math.Sin(myData.player.angle*(math.Pi/180))/30
-		if checkPos(*myData, newPos) {
+		if checkPos(newPos) {
 			myData.player.pos = newPos
 		}
 		newPos = myData.player.pos
 		newPos.x = myData.player.pos.x - math.Cos(myData.player.angle*(math.Pi/180))/30
-		if checkPos(*myData, newPos) {
+		if checkPos(newPos) {
 			myData.player.pos = newPos
 		}
 	}
@@ -47,8 +47,8 @@ func checkKey(myData *data) {
 	}
 }
 
-func checkPos(myData data, pos floatPosition) bool {
-	if isThereWall(floatPosToIntPos(pos), myData) {
+func checkPos(pos floatPosition) bool {
+	if isThereWall(floatPosToIntPos(pos)) {
 		return false
 	}
 	return true

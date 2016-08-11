@@ -12,7 +12,7 @@ func createMiniMap() miniMap {
 	return out
 }
 
-func drawMiniMap(myData data) {
+func drawMiniMap() {
 	var index uint32
 	var posPlayer, posInMap position
 	var myColor color.Color

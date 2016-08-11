@@ -18,8 +18,8 @@ func update(screen *ebiten.Image) error {
 		return fmt.Errorf("Window Closed")
 	}
 	fill(myData.pix, color.Black)
-	checkKey(&myData)
-	drawScreen(screen, myData)
+	checkKey()
+	drawScreen(screen)
 	screen.ReplacePixels(myData.pix.pixels)
 	return (nil)
 }
