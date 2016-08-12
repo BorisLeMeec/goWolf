@@ -48,7 +48,7 @@ func checkKey() {
 }
 
 func checkPos(pos floatPosition) bool {
-	if isThereWall(floatPosToIntPos(pos)) {
+	if isThereWall(pos.toIntPos()) {
 		return false
 	}
 	return true

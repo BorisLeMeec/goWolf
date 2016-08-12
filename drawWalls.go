@@ -43,7 +43,7 @@ func createFakeScreen() (out []floatPosition) {
 		newPos.y = prePos.y + myData.player.pos.y
 		newPos.x *= float64(15)
 		newPos.y *= float64(15)
-		myData.pix.setPixel(floatPosToIntPos(newPos), color.White)
+		myData.pix.setPixel(newPos.toIntPos(), color.White)
 		out = append(out, prePrePos)
 	}
 

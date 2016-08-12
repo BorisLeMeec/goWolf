@@ -1,26 +1,5 @@
 package main
 
-func newPosition(x, y int) position {
-	var out position
-
-	out.x = uint32(x)
-	out.y = uint32(y)
-	return out
-}
-
-func newSize(x, y int) size {
-
-	return size(newPosition(x, y))
-}
-
-func floatPosToIntPos(in floatPosition) position {
-	var out position
-
-	out.x = uint32(in.x)
-	out.y = uint32(in.y)
-	return out
-}
-
 type pixelArray struct {
 	size   size
 	pixels []uint8
@@ -30,6 +9,14 @@ type pixelArray struct {
 type position struct {
 	x uint32
 	y uint32
+}
+
+func (in *floatPosition) toIntPos() position {
+	var out position
+
+	out.x = uint32(in.x)
+	out.y = uint32(in.y)
+	return out
 }
 
 type size position

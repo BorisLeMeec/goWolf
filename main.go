@@ -38,6 +38,6 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error : %s\n", err)
 	}
-	ret := ebiten.Run(update, 400, 400, 1, "Go is Wonderful")
+	ret := ebiten.Run(update, int(width), int(height), 1, "Go is Wonderful")
 	fmt.Printf("Error : %s\n", ret)
 }

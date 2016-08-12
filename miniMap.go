@@ -6,9 +6,9 @@ func createMiniMap() miniMap {
 	var out miniMap
 
 	out.pix.new(10, 10)
-	out.pix.scale = newSize(15, 15)
+	out.pix.scale = size{15, 15}
 	out.zoom = 1
-	out.posStart = newPosition(0, 0)
+	out.posStart = position{0, 0}
 	return out
 }
 
@@ -17,7 +17,7 @@ func drawMiniMap() {
 	var posPlayer, posInMap position
 	var myColor color.Color
 
-	posPlayer = floatPosToIntPos(myData.player.pos)
+	posPlayer = myData.player.pos.toIntPos()
 	for posInMap.y = uint32(0); posInMap.y < myData.theMap.size.y; posInMap.y++ {
 		for posInMap.x = uint32(0); posInMap.x < myData.theMap.size.x; posInMap.x++ {
 			index = posInMap.y*myData.theMap.size.x + posInMap.x
