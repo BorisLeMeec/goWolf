@@ -19,13 +19,13 @@ func drawWall(pix pixelArray, height, x int) error {
 	for pos.y = 0; pos.y < pix.size.y; pos.y++ {
 		if pos.y < uint32(((int(pix.size.y) - height) / 2)) {
 			myColor = color.Black
-			setPixel(pix, pos, myColor)
+			pix.setPixel(pos, myColor)
 		} else if pos.y < uint32(height+((int(pix.size.y)-height)/2)) {
 			myColor = color.White
-			setPixel(pix, pos, myColor)
+			pix.setPixel(pos, myColor)
 		} else {
 			myColor = color.Black
-			setPixel(pix, pos, myColor)
+			pix.setPixel(pos, myColor)
 		}
 	}
 	return nil
@@ -43,7 +43,7 @@ func createFakeScreen() (out []floatPosition) {
 		newPos.y = prePos.y + myData.player.pos.y
 		newPos.x *= float64(15)
 		newPos.y *= float64(15)
-		setPixel(myData.pix, floatPosToIntPos(newPos), color.White)
+		myData.pix.setPixel(floatPosToIntPos(newPos), color.White)
 		out = append(out, prePrePos)
 	}
 

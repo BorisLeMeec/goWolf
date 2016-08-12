@@ -17,7 +17,7 @@ func update(screen *ebiten.Image) error {
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		return fmt.Errorf("Window Closed")
 	}
-	fill(myData.pix, color.Black)
+	myData.pix.fill(color.Black)
 	checkKey()
 	drawScreen(screen)
 	screen.ReplacePixels(myData.pix.pixels)
@@ -32,7 +32,7 @@ func main() {
 		return
 	}
 	myData.theMap, err = parser(os.Args[1])
-	myData.pix = newPixelArray(width, height)
+	myData.pix.new(width, height)
 	myData.miniMap = createMiniMap()
 	myData.player.pos = floatPosition{1, 1}
 	if err != nil {
