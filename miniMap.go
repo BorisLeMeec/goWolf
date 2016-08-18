@@ -5,10 +5,11 @@ import "image/color"
 func createMiniMap() miniMap {
 	var out miniMap
 
-	out.pix.new(10, 10)
+	out.pix = NewPixelArray(10, 10)
 	out.pix.scale = size{15, 15}
 	out.zoom = 1
 	out.posStart = position{0, 0}
+	out.pix.SetRotate(45)
 	return out
 }
 
@@ -30,7 +31,7 @@ func drawMiniMap() {
 			if posInMap.x == posPlayer.x && posInMap.y == posPlayer.y {
 				myColor = color.RGBA{255, 0, 0, 255}
 			}
-			myData.miniMap.pix.setPixel(posInMap, myColor)
+			myData.miniMap.pix.SetPixel(posInMap, myColor)
 		}
 	}
 	myData.miniMap.pix.changeOpacity(0.6)

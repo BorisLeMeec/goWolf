@@ -14,10 +14,11 @@ var width = uint32(400)
 var angleBetweenRay = 60 / float64(width)
 
 func update(screen *ebiten.Image) error {
+	myData.miniMap.pix.rotate++
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		return fmt.Errorf("Window Closed")
 	}
-	myData.pix.fill(color.Black)
+	myData.pix.Fill(color.Black)
 	checkKey()
 	drawScreen(screen)
 	screen.ReplacePixels(myData.pix.pixels)
@@ -32,9 +33,9 @@ func main() {
 		return
 	}
 	myData.theMap, err = parser(os.Args[1])
-	myData.pix.new(width, height)
+	myData.pix = NewPixelArray(width, height)
 	myData.miniMap = createMiniMap()
-	myData.player.pos = floatPosition{1, 1}
+	myData.player.pos = floatPosition{2, 2}
 	if err != nil {
 		fmt.Printf("Error : %s\n", err)
 	}

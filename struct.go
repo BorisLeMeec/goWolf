@@ -1,14 +1,19 @@
 package main
 
-type pixelArray struct {
-	size   size
-	pixels []uint8
-	scale  size
-}
-
 type position struct {
 	x uint32
 	y uint32
+}
+
+type size position
+
+func (p *size) maxSize() uint32 {
+	return p.x*p.y - 1
+}
+
+type floatPosition struct {
+	x float64
+	y float64
 }
 
 func (in *floatPosition) toIntPos() position {
@@ -17,13 +22,6 @@ func (in *floatPosition) toIntPos() position {
 	out.x = uint32(in.x)
 	out.y = uint32(in.y)
 	return out
-}
-
-type size position
-
-type floatPosition struct {
-	x float64
-	y float64
 }
 
 type vect floatPosition
@@ -47,12 +45,12 @@ type personnage struct {
 
 type miniMap struct {
 	posStart position
-	pix      pixelArray
+	pix      PixelArray
 	zoom     float32
 }
 
 type data struct {
-	pix     pixelArray
+	pix     PixelArray
 	miniMap miniMap
 	theMap  wolfMap
 	player  personnage

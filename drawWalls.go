@@ -3,9 +3,10 @@ package main
 import (
 	"image/color"
 	"math"
+	"sort"
 )
 
-func drawWall(pix pixelArray, height, x int) error {
+func drawWall(pix PixelArray, height, x int) error {
 	var pos position
 	var myColor color.Color
 
@@ -19,13 +20,13 @@ func drawWall(pix pixelArray, height, x int) error {
 	for pos.y = 0; pos.y < pix.size.y; pos.y++ {
 		if pos.y < uint32(((int(pix.size.y) - height) / 2)) {
 			myColor = color.Black
-			pix.setPixel(pos, myColor)
+			pix.SetPixel(pos, myColor)
 		} else if pos.y < uint32(height+((int(pix.size.y)-height)/2)) {
 			myColor = color.White
-			pix.setPixel(pos, myColor)
+			pix.SetPixel(pos, myColor)
 		} else {
 			myColor = color.Black
-			pix.setPixel(pos, myColor)
+			pix.SetPixel(pos, myColor)
 		}
 	}
 	return nil
@@ -43,13 +44,30 @@ func createFakeScreen() (out []floatPosition) {
 		newPos.y = prePos.y + myData.player.pos.y
 		newPos.x *= float64(15)
 		newPos.y *= float64(15)
-		myData.pix.setPixel(newPos.toIntPos(), color.White)
+		myData.pix.SetPixel(newPos.toIntPos(), color.White)
 		out = append(out, prePrePos)
 	}
-
 	return
 }
 
 func drawWalls() {
-	createFakeScreen()
+	fakeScreen := createFakeScreen()
+	var vectors = make([]vect, len(fakeScreen))
+	var k []float64
+	// var index uint32
+
+	for x := 0; x < len(fakeScreen); x++ {
+		k = make([]float64, myData.theMap.size.x+myData.theMap.size.y)
+		vectors[x] = vect{myData.player.pos.x - fakeScreen[x].x, myData.player.pos.y - fakeScreen[x].x}
+		for i := uint32(0); i < myData.theMap.size.x; i++ {
+			k[i] = (float64(i) - myData.player.pos.x) / vectors[x].x
+		}
+		for i := myData.theMap.size.x; i < myData.theMap.size.x+myData.theMap.size.y; i++ {
+			k[i] = (float64(i) - myData.player.pos.y) / vectors[x].y
+		}
+		sort.Sort(sort.Float64Slice(k))
+		i := 0
+		for ; k[i] <= 0; i++ {
+		}
+	}
 }
