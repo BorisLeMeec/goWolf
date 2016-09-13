@@ -10,7 +10,10 @@ var (
 	pink   = color.RGBA{255, 20, 147, 255}
 )
 
-func (pix *PixelArray) getColorAt(index uint32) (r, g, b, a uint8) {
+func (pix *PixelArray) getColorAt(index int) (r, g, b, a uint8) {
+	if index < 0 || index > pix.size.maxSize() {
+		return 0, 0, 0, 0
+	}
 	r = pix.pixels[index+0]
 	g = pix.pixels[index+1]
 	b = pix.pixels[index+2]
@@ -18,7 +21,10 @@ func (pix *PixelArray) getColorAt(index uint32) (r, g, b, a uint8) {
 	return
 }
 
-func (pix *PixelArray) setColorAt(index uint32, r, g, b, a uint8) {
+func (pix *PixelArray) setColorAt(index int, r, g, b, a uint8) {
+	if index < 0 || index > pix.size.maxSize() {
+		return
+	}
 	pix.pixels[index+0] = r
 	pix.pixels[index+1] = g
 	pix.pixels[index+2] = b
@@ -28,7 +34,7 @@ func (pix *PixelArray) setColorAt(index uint32, r, g, b, a uint8) {
 func (pix *PixelArray) changeOpacity(opacity float32) {
 	a := uint8(opacity * 255)
 
-	for x := uint32(0); x < pix.size.x*pix.size.y*4; x += 4 {
+	for x := 0; x < pix.size.x*pix.size.y*4; x += 4 {
 		pix.pixels[x+3] = a
 	}
 }

@@ -9,12 +9,11 @@ import (
 )
 
 var myData data
-var height = uint32(400)
-var width = uint32(400)
+var height = 400
+var width = 400
 var angleBetweenRay = 60 / float64(width)
 
 func update(screen *ebiten.Image) error {
-	myData.miniMap.pix.rotate++
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		return fmt.Errorf("Window Closed")
 	}

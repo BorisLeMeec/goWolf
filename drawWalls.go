@@ -13,15 +13,15 @@ func drawWall(pix PixelArray, height, x int) error {
 	if x < 0 || x > int(pix.size.x) {
 		return nil
 	}
-	pos.x = uint32(x)
+	pos.x = x
 	if height > int(pix.size.y) {
 		height = int(pix.size.y)
 	}
 	for pos.y = 0; pos.y < pix.size.y; pos.y++ {
-		if pos.y < uint32(((int(pix.size.y) - height) / 2)) {
+		if pos.y < ((int(pix.size.y) - height) / 2) {
 			myColor = color.Black
 			pix.SetPixel(pos, myColor)
-		} else if pos.y < uint32(height+((int(pix.size.y)-height)/2)) {
+		} else if pos.y < height+((int(pix.size.y)-height)/2) {
 			myColor = color.White
 			pix.SetPixel(pos, myColor)
 		} else {
@@ -35,7 +35,7 @@ func drawWall(pix PixelArray, height, x int) error {
 func createFakeScreen() (out []floatPosition) {
 	var prePrePos, prePos, newPos floatPosition
 
-	for i := uint32(0); i < myData.pix.size.x; i++ {
+	for i := 0; i < myData.pix.size.x; i++ {
 		prePrePos.x = 0.5
 		prePrePos.y = ((float64(myData.pix.size.x)/2 - float64(i)) / float64(myData.pix.size.x))
 		prePos.x = prePrePos.x*math.Cos(myData.player.angle*(math.Pi/180)) - prePrePos.y*math.Sin(myData.player.angle*(math.Pi/180))
@@ -59,7 +59,7 @@ func drawWalls() {
 	for x := 0; x < len(fakeScreen); x++ {
 		k = make([]float64, myData.theMap.size.x+myData.theMap.size.y)
 		vectors[x] = vect{myData.player.pos.x - fakeScreen[x].x, myData.player.pos.y - fakeScreen[x].x}
-		for i := uint32(0); i < myData.theMap.size.x; i++ {
+		for i := 0; i < myData.theMap.size.x; i++ {
 			k[i] = (float64(i) - myData.player.pos.x) / vectors[x].x
 		}
 		for i := myData.theMap.size.x; i < myData.theMap.size.x+myData.theMap.size.y; i++ {

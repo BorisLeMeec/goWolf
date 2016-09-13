@@ -14,13 +14,13 @@ func createMiniMap() miniMap {
 }
 
 func drawMiniMap() {
-	var index uint32
+	var index int
 	var posPlayer, posInMap position
 	var myColor color.Color
 
 	posPlayer = myData.player.pos.toIntPos()
-	for posInMap.y = uint32(0); posInMap.y < myData.theMap.size.y; posInMap.y++ {
-		for posInMap.x = uint32(0); posInMap.x < myData.theMap.size.x; posInMap.x++ {
+	for posInMap.y = 0; posInMap.y < myData.theMap.size.y; posInMap.y++ {
+		for posInMap.x = 0; posInMap.x < myData.theMap.size.x; posInMap.x++ {
 			index = posInMap.y*myData.theMap.size.x + posInMap.x
 			switch myData.theMap.array[index] {
 			case '1':

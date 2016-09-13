@@ -13,14 +13,15 @@ type PixelArray struct {
 	size   size
 	scale  size
 	rotate float64
+	mask   Mask
 }
 
 func getPixelArray(img *ebiten.Image) (PixelArray, error) {
 	imageHeight, imageWidth := img.Size()
 	var out PixelArray
 
-	out.size.x = uint32(imageWidth)
-	out.size.y = uint32(imageHeight)
+	out.size.x = imageWidth
+	out.size.y = imageHeight
 	for y := 0; y < imageHeight; y += 4 {
 		for x := 0; x < imageWidth; x += 4 {
 			r, g, b, a := img.At(y, x).RGBA()
@@ -41,14 +42,16 @@ func (pix *PixelArray) SetPixel(pos position, color color.Color) {
 }
 
 // NewPixelArray return a pixelArray of size (width, height)
-func NewPixelArray(width, height uint32) PixelArray {
+func NewPixelArray(width, height int) PixelArray {
 	var out PixelArray
-
+	//TODO check width && height > 0
 	out.size.x = width
 	out.size.y = height
 	out.scale = size{1, 1}
-	for y := uint32(0); y < height*4; y += 4 {
-		for x := uint32(0); x < width*4; x += 4 {
+	out.newMask()
+	out.ApplyMask("assets/mask1.png")
+	for y := 0; y < height*4; y += 4 {
+		for x := 0; x < width*4; x += 4 {
 			r, g, b, a := color.Black.RGBA()
 			out.pixels = append(out.pixels, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 		}
@@ -57,7 +60,8 @@ func NewPixelArray(width, height uint32) PixelArray {
 }
 
 // SetScale is used to set the scale of 'pix'
-func (pix *PixelArray) SetScale(x, y uint32) {
+func (pix *PixelArray) SetScale(x, y int) {
+	//TODO check scale > 0
 	if x < 0 || y < 0 {
 		return
 	}
@@ -81,7 +85,7 @@ func (pix *PixelArray) GetRotate() float64 {
 func (pix *PixelArray) Blit(src PixelArray, posStart position, size size) {
 	var rSrc, gSrc, bSrc, aSrc, rBlit, gBlit, bBlit, aBlit, rDest, gDest, bDest, aDest uint8
 	var posToBlit, posToGet position
-	var indexBlit, indexGet uint32
+	var indexBlit, indexGet int
 
 	if posStart.x < 0 || posStart.x > pix.size.x || posStart.y < 0 || posStart.y > pix.size.y {
 		return
@@ -91,19 +95,19 @@ func (pix *PixelArray) Blit(src PixelArray, posStart position, size size) {
 	}
 	cos := math.Cos(src.rotate * (math.Pi / 180))
 	sin := math.Sin(src.rotate * (math.Pi / 180))
-	centerX := src.size.x / 2
-	centerY := src.size.y / 2
+	centerX := src.size.x * src.scale.x / 2.0
+	centerY := src.size.y * src.scale.y / 2.0
 
 	for posToGet.y = 0; posToGet.y < src.size.y && posToGet.y < size.y; posToGet.y++ {
 		for posToGet.x = 0; posToGet.x < src.size.x && posToGet.x < size.x; posToGet.x++ {
 			indexGet = 4 * (posToGet.y*src.size.x + posToGet.x)
 			rSrc, gSrc, bSrc, aSrc = src.getColorAt(indexGet)
-			for i := uint32(0); i < src.scale.x; i++ {
-				for j := uint32(0); j < src.scale.y; j++ {
+			for i := 0; i < src.scale.x; i++ {
+				for j := 0; j < src.scale.y; j++ {
 					m := src.scale.x*(posToGet.x+posStart.x) + i - centerX
 					n := src.scale.y*(posToGet.y+posStart.y) + j - centerY
-					posToBlit.x = uint32((float64(m)*cos + float64(n)*sin)) + centerX
-					posToBlit.y = uint32((float64(n)*cos - float64(m)*sin)) + centerY
+					posToBlit.x = int((float64(m)*cos + float64(n)*sin)) + centerX
+					posToBlit.y = int((float64(n)*cos - float64(m)*sin)) + centerY
 
 					if posToBlit.x > pix.size.x-1 || posToBlit.y > pix.size.y-1 {
 						continue
@@ -125,7 +129,7 @@ func (pix *PixelArray) Blit(src PixelArray, posStart position, size size) {
 func (pix *PixelArray) Fill(color color.Color) {
 	_r, _g, _b, _a := color.RGBA()
 
-	for x := uint32(0); x < pix.size.x*pix.size.y*4; x += 4 {
+	for x := 0; x < pix.size.x*pix.size.y*4; x += 4 {
 		pix.setColorAt(x, uint8(_r>>8), uint8(_g>>8), uint8(_b>>8), uint8(_a>>8))
 	}
 }

@@ -1,13 +1,13 @@
 package main
 
 type position struct {
-	x uint32
-	y uint32
+	x int
+	y int
 }
 
 type size position
 
-func (p *size) maxSize() uint32 {
+func (p *size) maxSize() int {
 	return p.x*p.y - 1
 }
 
@@ -19,8 +19,8 @@ type floatPosition struct {
 func (in *floatPosition) toIntPos() position {
 	var out position
 
-	out.x = uint32(in.x)
-	out.y = uint32(in.y)
+	out.x = int(in.x)
+	out.y = int(in.y)
 	return out
 }
 

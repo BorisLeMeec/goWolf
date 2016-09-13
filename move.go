@@ -35,9 +35,11 @@ func checkKey() {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
 		myData.player.angle -= 3
+		myData.miniMap.pix.rotate -= 3
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
 		myData.player.angle += 3
+		myData.miniMap.pix.rotate += 3
 	}
 	if myData.player.angle > 360 {
 		myData.player.angle = 0
