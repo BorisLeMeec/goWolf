@@ -45,12 +45,12 @@ type personnage struct {
 
 type miniMap struct {
 	posStart position
-	pix      PixelArray
+	pix      *PixelArray
 	zoom     float32
 }
 
 type data struct {
-	pix     PixelArray
+	pix     *PixelArray
 	miniMap miniMap
 	theMap  wolfMap
 	player  personnage

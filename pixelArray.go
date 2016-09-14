@@ -42,9 +42,12 @@ func (pix *PixelArray) SetPixel(pos position, color color.Color) {
 }
 
 // NewPixelArray return a pixelArray of size (width, height)
-func NewPixelArray(width, height int) PixelArray {
+func NewPixelArray(width, height int) *PixelArray {
 	var out PixelArray
-	//TODO check width && height > 0
+
+	if width <= 0 || height <= 0 {
+		return nil
+	}
 	out.size.x = width
 	out.size.y = height
 	out.scale = size{1, 1}
@@ -56,12 +59,11 @@ func NewPixelArray(width, height int) PixelArray {
 			out.pixels = append(out.pixels, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
 		}
 	}
-	return out
+	return &out
 }
 
 // SetScale is used to set the scale of 'pix'
 func (pix *PixelArray) SetScale(x, y int) {
-	//TODO check scale > 0
 	if x < 0 || y < 0 {
 		return
 	}
@@ -108,8 +110,7 @@ func (pix *PixelArray) Blit(src PixelArray, posStart position, size size) {
 					n := src.scale.y*(posToGet.y+posStart.y) + j - centerY
 					posToBlit.x = int((float64(m)*cos + float64(n)*sin)) + centerX
 					posToBlit.y = int((float64(n)*cos - float64(m)*sin)) + centerY
-
-					if posToBlit.x > pix.size.x-1 || posToBlit.y > pix.size.y-1 {
+					if posToBlit.x > pix.size.x-1 || posToBlit.x < 0 || posToBlit.y > pix.size.y-1 || posToBlit.y < 0 {
 						continue
 					}
 					indexBlit = 4 * (posToBlit.y*pix.size.x + posToBlit.x)

@@ -53,11 +53,10 @@ func createFakeScreen() (out []floatPosition) {
 func drawWalls() {
 	fakeScreen := createFakeScreen()
 	var vectors = make([]vect, len(fakeScreen))
-	var k []float64
+	var k = make([]float64, myData.theMap.size.x+myData.theMap.size.y)
 	// var index uint32
 
 	for x := 0; x < len(fakeScreen); x++ {
-		k = make([]float64, myData.theMap.size.x+myData.theMap.size.y)
 		vectors[x] = vect{myData.player.pos.x - fakeScreen[x].x, myData.player.pos.y - fakeScreen[x].x}
 		for i := 0; i < myData.theMap.size.x; i++ {
 			k[i] = (float64(i) - myData.player.pos.x) / vectors[x].x

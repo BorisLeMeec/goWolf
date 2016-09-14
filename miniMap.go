@@ -9,7 +9,7 @@ func createMiniMap() miniMap {
 	out.pix.scale = size{15, 15}
 	out.zoom = 1
 	out.posStart = position{0, 0}
-	out.pix.SetRotate(45)
+	// out.pix.SetRotate(-90)
 	return out
 }
 

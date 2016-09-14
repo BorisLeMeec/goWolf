@@ -11,7 +11,7 @@ var (
 )
 
 func (pix *PixelArray) getColorAt(index int) (r, g, b, a uint8) {
-	if index < 0 || index > pix.size.maxSize() {
+	if index < 0 || index > 4*pix.size.maxSize() {
 		return 0, 0, 0, 0
 	}
 	r = pix.pixels[index+0]
@@ -22,7 +22,7 @@ func (pix *PixelArray) getColorAt(index int) (r, g, b, a uint8) {
 }
 
 func (pix *PixelArray) setColorAt(index int, r, g, b, a uint8) {
-	if index < 0 || index > pix.size.maxSize() {
+	if index < 0 || index > 4*pix.size.maxSize() {
 		return
 	}
 	pix.pixels[index+0] = r
