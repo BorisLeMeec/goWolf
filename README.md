@@ -6,3 +6,5 @@ Recode a wolf3d in Go
 -gopkg.in/ini.v1 
 
 -github.com/hajimehoshi/ebiten
+
+-github.com/yosssi/gologger
